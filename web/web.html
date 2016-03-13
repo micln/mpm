@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MPM web管理台</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css">
+</head>
+<body>
+
+<br>
+
+<div class="container">
+
+<h2>My Password Manager</h2><hr>
+
+	<form class="form-inline" action="/">
+		<div class="form-group">
+			<select class="form-control">
+				<option value="gen">新建</option>
+			</select>
+			<input type="hidden" name="action" value="gen">
+		</div>
+		<div class="form-group">
+			<input name="label" class="form-control" placeholder="标签名" autofocus="">
+		</div>
+		<input type="submit" class="btn btn-success" value="生成新的密码">
+	</form>
+
+	<hr>
+	<table class="table">
+		<tr>
+			<th>label
+			<th>password
+			<th>operation
+		</tr>
+
+		{{ range $k, $v := .list}}
+			<tr>
+				<td>{{$k}}</td>
+				<td>{{$v}}</td>
+				<td>
+					<a href="/?action=del&label={{$k}}" class="btn btn-danger">删除</a>
+				</td>
+			</tr>
+		{{end}}
+	</table>
+</div>
+
+	
+</body>
+</html>

@@ -1,0 +1,10 @@
+Usage：
+	
+	mpm l [s]
+		查看密码，过滤s
+		别名：ls list
+
+	mpm add label password
+		添加密码，覆盖方式
+		别名：push put set
+
