@@ -15,7 +15,6 @@ func init() {
 }
 
 func API(w http.ResponseWriter, r *http.Request) {
-
 	action := r.URL.Query().Get("action")
 	query := r.URL.Query().Get("label")
 	switch action {
