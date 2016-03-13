@@ -3,7 +3,7 @@ package web
 import (
 	"encoding/json"
 	"log"
-	"myPassword/passer"
+	"mpm/passer"
 	"net/http"
 	"text/template"
 )

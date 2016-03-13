@@ -1,7 +1,7 @@
 package main
 
 import (
-	"myPassword/web"
+	"mpm/web"
 	"net/http"
 )
 

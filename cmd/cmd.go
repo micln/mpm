@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"myPassword/passer"
+	"mpm/passer"
 	"os"
 )
 

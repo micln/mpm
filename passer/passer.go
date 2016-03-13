@@ -71,7 +71,7 @@ func (this *Passer) GetToCLI(greps ...string) {
 
 func randomPassowrd() string {
 	rand.Seed(time.Now().UnixNano())
-	all := `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`
+	all := `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`
 	s := ``
 	for i := 1; i <= 12; i++ {
 		j := rand.Intn(len(all))
