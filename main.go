@@ -6,8 +6,10 @@ import (
 )
 
 func main() {
+
+	//	cmd.RunCmd()
+
 	RunWeb()
-	//RunCmd()
 }
 
 func RunWeb() {

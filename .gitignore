@@ -23,5 +23,11 @@ _testmain.go
 *.test
 *.prof
 
+# IntelliJ IDEA
+.idea/
+
+# DataBase
 mp.dbp
+
+# exe
 mpm

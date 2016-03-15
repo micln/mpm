@@ -4,6 +4,11 @@
 	<title>MPM web管理台</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<style type="text/css">
+		.clickedChange{
+			cursor: pointer;
+		}
+	</style>
 </head>
 <body>
 
@@ -14,31 +19,53 @@
 <h2>My Password Manager</h2><hr>
 
 	<form class="form-inline" action="/">
+		
 		<div class="form-group">
 			<select name="action" class="form-control">
 				<option value="gen">新建</option>
+				<option value="del">删除</option>
 			</select>
 		</div>
+		<input type="hidden" name="id" value="">
 		<div class="form-group">
 			<input name="label" class="form-control" placeholder="标签名" autofocus="">
 		</div>
+		<div class="form-group">
+			<input name="password" class="form-control" placeholder="密码。不填时随机生成">
+		</div>
+		<div class="form-group">
+			<input name="note" class="form-control" placeholder="备注">
+		</div>
 		<input type="submit" class="btn btn-success" value="生成新的密码">
+		<a class="btn btn-default" href="/" target="_blank">导出JSON</a>
 	</form>
+
+	<hr>
+	<div class="toolbar">
+		<p>
+			<input type="checkbox" id='saveOnChange' checked="checked"> 修改时自动保存
+		</p>
+	</div>
 
 	<hr>
 	<table class="table">
 		<tr>
+			<th>Id
 			<th>label
 			<th>password
+			<th>notes
 			<th>operation
 		</tr>
 
 		{{ range $k, $v := .list}}
-			<tr>
-				<td>{{$k}}</td>
-				<td>{{$v}}</td>
+			<tr class="{{$v.Id}}" data-someone='{{$v.Id}}'>
+				<td class="id">{{$v.Id}}</td>
+				<td class="f_label clickedChange">{{$v.Label}}</td>
+				<td class="password clickedChange">{{$v.Password}}</td>
+				<td class="note clickedChange">{{$v.Note}}</td>
 				<td>
-					<a href="/?action=del&label={{$k}}" class="btn btn-danger">删除</a>
+					<a href="javascript:changeOne({{$v.Id}})" class="btn btn-primary">保存</a>
+					<a href="/?action=del&id={{$v.Id}}" class="btn btn-danger inBack">删除</a>
 				</td>
 			</tr>
 		{{end}}
@@ -48,7 +75,7 @@
 <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
 <script type="text/javascript">
 
-	var data = { {{range $k,$v := .list}}'{{$k}}':'{{$v}}',{{end}} };
+	var data = { {{range $k,$v := .list}}'{{$v.Label}}':true,{{end}} };
 
 	$('form').submit(function(){
 
@@ -66,6 +93,37 @@
 		
 		return false;
 	})
+
+	$('.clickedChange').click(function(){
+		var newdata = prompt('请输入新数据', $(this).text());
+		if (newdata) {
+			$(this).text(newdata);
+			if ($('#saveOnChange').is(':checked')) {
+				var id = $(this).parents('tr').data('someone');
+				changeOne(id);
+			}
+		}
+	});
+
+	$('a.inBack').click(function(){
+		$.get($(this).attr('href'));
+		location.reload();
+		return false;
+	})
+
+	function changeOne(id) {
+		$.get('/', {
+			action : 'gen',
+			id : id,
+			label : $('tr.'+id+' .f_label').text(),
+			password : $('tr.'+id+' .password').text(),
+			note : $('tr.'+id+' .note').text()
+		}, function(){location.reload();});
+	}
+
+	function deleteOne(id) {
+
+	}
 </script>
 
 	

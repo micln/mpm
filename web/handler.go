@@ -5,6 +5,7 @@ import (
 	"log"
 	"mpm/passer"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
@@ -16,18 +17,28 @@ func init() {
 
 func API(w http.ResponseWriter, r *http.Request) {
 	action := r.URL.Query().Get("action")
-	query := r.URL.Query().Get("label")
+	id, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	label := r.URL.Query().Get("label")
+	password := r.URL.Query().Get("password")
+	note := r.URL.Query().Get("note")
+
 	switch action {
 	case "get":
-		result := P.Get(query)
-		b, _ := json.Marshal(result)
-		w.Write(b)
 	case "gen":
-		P.Gen(query)
-		result := P.Get(query)
-		b, _ := json.Marshal(result)
-		w.Write(b)
+		p := &passer.Password{
+			Id:       id,
+			Label:    label,
+			Password: password,
+			Note:     note,
+		}
+		p.Save()
+	case "del":
+		passer.Password{Id: id}.Remove()
 	}
+
+	result := P.Get(label)
+	b, _ := json.Marshal(result)
+	w.Write(b)
 }
 
 func WebMgr(w http.ResponseWriter, r *http.Request) {
