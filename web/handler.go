@@ -9,7 +9,7 @@ import (
 	"text/template"
 )
 
-var P *passer.Passer
+var P *passer.PManager
 
 func init() {
 	P = passer.Pr

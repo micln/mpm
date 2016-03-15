@@ -14,13 +14,13 @@ import (
 
 const DB_FILE_NAME = `mp.dbp`
 
-var Pr *Passer
+var Pr *PManager
 
 func init() {
 	Pr = NewPasser()
 }
 
-type Passer struct {
+type PManager struct {
 	Skey  string
 	List  map[string]string
 	Datas []*Password
@@ -35,8 +35,8 @@ type Password struct {
 	Note     string
 }
 
-func NewPasser() *Passer {
-	passer := Passer{}
+func NewPasser() *PManager {
+	passer := PManager{}
 	passer.List = make(map[string]string)
 	passer.LoadFromDB()
 	return &passer
@@ -105,21 +105,21 @@ func (p *Password) Exist() bool {
 	return Pr.Exist(p)
 }
 
-func (this *Passer) GetSkey() string {
+func (this *PManager) GetSkey() string {
 	return ``
 }
 
-func (this *Passer) Len() int {
+func (this *PManager) Len() int {
 	return len(this.Datas)
 }
 
-func (this *Passer) NextId() int {
+func (this *PManager) NextId() int {
 	this.nextId += 1
 	return this.nextId
 }
 
 //	所有判重使用Label属性
-func (this *Passer) Exist(p *Password) bool {
+func (this *PManager) Exist(p *Password) bool {
 	for i := range this.Datas {
 		if this.Datas[i].Label == p.Label {
 			return true
@@ -146,7 +146,7 @@ func (this *Passer) Exist(p *Password) bool {
 //	return p
 //}
 
-func (this *Passer) Get(greps ...string) (result []*Password) {
+func (this *PManager) Get(greps ...string) (result []*Password) {
 
 	grep := ""
 	if len(greps) > 0 {
@@ -163,7 +163,7 @@ func (this *Passer) Get(greps ...string) (result []*Password) {
 	return result
 }
 
-func (this *Passer) GetToCLI(greps ...string) {
+func (this *PManager) GetToCLI(greps ...string) {
 	result := this.Get(greps...)
 	for k, v := range result {
 		fmt.Printf("%-15s: %s\n", k, v)
@@ -184,7 +184,7 @@ func randomPassowrd() string {
 	return s
 }
 
-func (this *Passer) Gen(label, note string) {
+func (this *PManager) Gen(label, note string) {
 	pwd := randomPassowrd()
 	p := &Password{
 		Label:    label,
@@ -194,7 +194,7 @@ func (this *Passer) Gen(label, note string) {
 	p.Save()
 }
 
-func (this *Passer) SaveToDB() {
+func (this *PManager) SaveToDB() {
 	var ss []interface{}
 	for _, v := range this.Datas {
 		ss = append(ss, v.serialize())
@@ -203,7 +203,7 @@ func (this *Passer) SaveToDB() {
 	ioutil.WriteFile(DB_FILE_NAME, b, os.ModePerm)
 }
 
-func (this *Passer) LoadFromDB() {
+func (this *PManager) LoadFromDB() {
 	b, e := ioutil.ReadFile(DB_FILE_NAME)
 
 	//	首次运行

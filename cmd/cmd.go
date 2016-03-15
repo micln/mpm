@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var P *passer.Passer
+var P *passer.PManager
 
 func init() {
 	P = passer.Pr
