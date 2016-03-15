@@ -1,5 +1,7 @@
 # My Password Manager
 
+[Download](http://anonymous.qiniudn.com/my-password-manager/release-latest.zip)
+
 ## 预览
 
 ### 集成到 Alfred （推荐用法）:
