@@ -1,12 +1,17 @@
 package web
 
 import (
+	"crypto/sha1"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
+	"math/rand"
 	"mpm/passer"
 	"net/http"
 	"strconv"
 	"text/template"
+	"time"
 )
 
 var P *passer.PManager
@@ -47,7 +52,31 @@ func WebMgr(w http.ResponseWriter, r *http.Request) {
 
 	data[`list`] = P.Get()
 
-	tp, e := template.ParseFiles(`web/web.html`)
+	responseHTML(w, `web/web.html`, data)
+
+	return
+
+}
+
+func SyncQr(w http.ResponseWriter, r *http.Request) {
+	salt := sha1.Sum([]byte(fmt.Sprint(time.Now().Nanosecond(), random())))
+	log.Println(salt)
+	responseHTML(w, `web/qr.html`, map[string]string{})
+	return
+}
+
+func Public(w http.ResponseWriter, r *http.Request) {
+	b, e := ioutil.ReadFile(`web/public` + r.URL.String())
+	if e != nil {
+		w.Write([]byte(e.Error()))
+	}
+
+	w.Write(b)
+}
+
+func responseHTML(w http.ResponseWriter, filename string, data interface{}) {
+
+	tp, e := template.ParseFiles(filename)
 	if e != nil {
 		log.Println(e)
 		return
@@ -58,4 +87,9 @@ func WebMgr(w http.ResponseWriter, r *http.Request) {
 		log.Println(e)
 		return
 	}
+}
+
+func random() int64 {
+	rand.Seed(int64(time.Now().Nanosecond()))
+	return rand.Int63()
 }

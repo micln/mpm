@@ -19,7 +19,7 @@
 <h2>My Password Manager</h2><hr>
 
 	<form class="form-inline" action="/">
-		
+
 		<div class="form-group">
 			<select name="action" class="form-control">
 				<option value="gen">新建</option>
@@ -77,24 +77,26 @@
 
 	var data = { {{range $k,$v := .list}}'{{$v.Label}}':true,{{end}} };
 
-	$('form').submit(function(){
+	$('form').submit(function () {
 
 		//	check dumplicate
 		var label = $('[name=label]').val();
-		if ( data[label] !== undefined) {
-			if ( !confirm(label+'已存在，要覆盖吗？')) return false;
+		if (data[label] !== undefined) {
+			if (!confirm(label + '已存在，要覆盖吗？')) return false;
 		}
-		
-		$.get(
-			$(this).attr('action'), 
-			$(this).serialize(), 
-			function(){ location.reload();}
-		);
-		
-		return false;
-	})
 
-	$('.clickedChange').click(function(){
+		$.get(
+				$(this).attr('action'),
+				$(this).serialize(),
+				function () {
+					location.reload();
+				}
+		);
+
+		return false;
+	});
+
+	$('.clickedChange').click(function () {
 		var newdata = prompt('请输入新数据', $(this).text());
 		if (newdata) {
 			$(this).text(newdata);
@@ -105,20 +107,22 @@
 		}
 	});
 
-	$('a.inBack').click(function(){
+	$('a.inBack').click(function () {
 		$.get($(this).attr('href'));
 		location.reload();
 		return false;
-	})
+	});
 
 	function changeOne(id) {
 		$.get('/', {
-			action : 'gen',
-			id : id,
-			label : $('tr.'+id+' .f_label').text(),
-			password : $('tr.'+id+' .password').text(),
-			note : $('tr.'+id+' .note').text()
-		}, function(){location.reload();});
+			action: 'gen',
+			id: id,
+			label: $('tr.' + id + ' .f_label').text(),
+			password: $('tr.' + id + ' .password').text(),
+			note: $('tr.' + id + ' .note').text()
+		}, function () {
+			location.reload();
+		});
 	}
 
 	function deleteOne(id) {
@@ -126,6 +130,6 @@
 	}
 </script>
 
-	
+
 </body>
 </html>

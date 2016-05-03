@@ -13,7 +13,9 @@ func main() {
 }
 
 func RunWeb() {
-	http.HandleFunc("/", web.API)
+	http.HandleFunc("/", web.Public)
 	http.HandleFunc("/web", web.WebMgr)
+	http.HandleFunc("/sync", web.SyncQr)
+
 	http.ListenAndServe(":10107", nil)
 }
