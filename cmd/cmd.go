@@ -3,14 +3,14 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"mpm/passer"
+	"mpm/pm"
 	"os"
 )
 
-var P *passer.PManager
+var P *passwordProvider.PManager
 
 func init() {
-	P = passer.Pr
+	P = passwordProvider.Pr
 }
 
 func RunCmd() {

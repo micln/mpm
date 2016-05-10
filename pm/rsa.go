@@ -1,4 +1,4 @@
-package passer
+package pm
 
 import (
 	"crypto/rand"

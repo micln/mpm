@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>MPM web管理台</title>
-	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<style type="text/css">
-		.clickedChange{
-			cursor: pointer;
-		}
-	</style>
+    <title>MPM web管理台</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style type="text/css">
+        .clickedChange{
+        cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,73 +16,88 @@
 
 <div class="container">
 
-<h2>My Password Manager</h2><hr>
+    <h2>My Password Manager</h2>
+    <hr>
 
-	<form class="form-inline" action="/">
+    <form class="form-inline" action="/">
 
-		<div class="form-group">
-			<select name="action" class="form-control">
-				<option value="gen">新建</option>
-				<option value="del">删除</option>
-			</select>
-		</div>
-		<input type="hidden" name="id" value="">
-		<div class="form-group">
-			<input name="label" class="form-control" placeholder="标签名" autofocus="">
-		</div>
-		<div class="form-group">
-			<input name="password" class="form-control" placeholder="密码。不填时随机生成">
-		</div>
-		<div class="form-group">
-			<input name="note" class="form-control" placeholder="备注">
-		</div>
-		<input type="submit" class="btn btn-success" value="生成新的密码">
-		<a class="btn btn-default" href="/" target="_blank">导出JSON</a>
-	</form>
+        <!--<div class="form-group">-->
+        <!--<select name="action" class="form-control">-->
+        <!--<option value="gen">新建</option>-->
+        <!--<option value="del">删除</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <input type="hidden" name="action" value="gen">
+        <input type="hidden" name="id" value="">
+        <div class="form-group">
+            <input name="title" class="form-control" placeholder="标签名" autofocus="">
+        </div>
+        <br>
+        <div class="form-group">
+            <input name="site" class="form-control" placeholder="网址">
+        </div>
+        <div class="form-group">
+            <input name="account" class="form-control" placeholder="账户名">
+        </div>
+        <div class="form-group">
+            <input name="password" class="form-control" placeholder="密码。不填时随机生成">
+        </div>
+        <br>
+        <div class="form-group">
+            <input name="note" class="form-control" placeholder="备注">
+        </div>
+        <br>
+        <input type="submit" class="btn btn-success" value="生成新的密码">
+        <a class="btn btn-default" href="/" target="_blank">导出JSON</a>
+    </form>
 
-	<hr>
-	<div class="toolbar">
-		<p>
-			<input type="checkbox" id='saveOnChange' checked="checked"> 修改时自动保存
-		</p>
-	</div>
+    <hr>
+    <div class="toolbar">
+        <p>
+            <input type="checkbox" id='saveOnChange' checked="checked"> 修改时自动保存
+        </p>
+    </div>
 
-	<hr>
-	<table class="table">
-		<tr>
-			<th>Id
-			<th>label
-			<th>password
-			<th>notes
-			<th>operation
-		</tr>
+    <hr>
+    <table class="table">
+        <tr>
+            <th>Id
+            <th>名称
+            <th>站点
+            <th>账号
+            <th>密码
+            <th>备注
+            <th>操作
+        </tr>
 
-		{{ range $k, $v := .list}}
-			<tr class="{{$v.Id}}" data-someone='{{$v.Id}}'>
-				<td class="id">{{$v.Id}}</td>
-				<td class="f_label clickedChange">{{$v.Label}}</td>
-				<td class="password clickedChange">{{$v.Password}}</td>
-				<td class="note clickedChange">{{$v.Note}}</td>
-				<td>
-					<a href="javascript:changeOne({{$v.Id}})" class="btn btn-primary">保存</a>
-					<a href="/?action=del&id={{$v.Id}}" class="btn btn-danger inBack">删除</a>
-				</td>
-			</tr>
-		{{end}}
-	</table>
+        {{ range $k, $v := .list }}
+        <tr class="{{$v.Id}}" data-someone='{{$v.Id}}'>
+            <td class="id">{{$v.Id}}</td>
+            <td class="f_title clickedChange">{{$v.Title}}</td>
+            <td class="f_site clickedChange">{{$v.Site}}</td>
+            <td class="f_account clickedChange">{{$v.Account}}</td>
+            <td class="f_password clickedChange">{{$v.Password}}</td>
+            <td class="f_note clickedChange">{{$v.Note}}</td>
+            <td>
+                <a href="javascript:changeOne({{$v.Id}})" class="btn btn-primary">保存</a>
+                <a href="/?action=del&id={{$v.Id}}" class="btn btn-danger inBack">删除</a>
+            </td>
+        </tr>
+        {{end}}
+    </table>
 </div>
 
 <script type="text/javascript" src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
 <script type="text/javascript">
 
-	var data = { {{range $k,$v := .list}}'{{$v.Label}}':true,{{end}} };
+	var data = { {{range $k,$v := .list}}'{{$v.Title}}':true,{{end}} };
 
 	$('form').submit(function () {
 
 		//	check dumplicate
-		var label = $('[name=label]').val();
-		if (data[label] !== undefined) {
-			if (!confirm(label + '已存在，要覆盖吗？')) return false;
+		var title = $('[name=title]').val();
+		if (data[title] !== undefined) {
+			if (!confirm(title + '已存在，要覆盖吗？')) return false;
 		}
 
 		$.get(
@@ -114,13 +129,14 @@
 	});
 
 	function changeOne(id) {
-		$.get('/', {
+		var data = {
 			action: 'gen',
-			id: id,
-			label: $('tr.' + id + ' .f_label').text(),
-			password: $('tr.' + id + ' .password').text(),
-			note: $('tr.' + id + ' .note').text()
-		}, function () {
+			id: id
+		}
+		$.each(['title','site','account','password','note'],function(idx, field){
+			data[field] = $('tr.' + id + ' .f_' + field).text();
+		})
+		$.get('/', data, function () {
 			location.reload();
 		});
 	}
@@ -128,6 +144,7 @@
 	function deleteOne(id) {
 
 	}
+
 </script>
 
 

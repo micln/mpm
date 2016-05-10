@@ -2,47 +2,60 @@ package web
 
 import (
 	"crypto/sha1"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
-	"mpm/passer"
+	"mpm/pm"
 	"net/http"
 	"strconv"
 	"text/template"
 	"time"
+
+	"github.com/chanxuehong/wechat/json"
 )
 
-var P *passer.PManager
+var P *pm.PManager
 
 func init() {
-	P = passer.Pr
+	P = pm.Pr
 }
 
 func API(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL)
+
 	action := r.URL.Query().Get("action")
 	id, _ := strconv.Atoi(r.URL.Query().Get("id"))
-	label := r.URL.Query().Get("label")
+	title := r.URL.Query().Get("title")
+	site := r.URL.Query().Get("site")
+	account := r.URL.Query().Get("account")
 	password := r.URL.Query().Get("password")
 	note := r.URL.Query().Get("note")
 
 	switch action {
 	case "get":
 	case "gen":
-		p := &passer.Password{
+		p := &pm.Password{
 			Id:       id,
-			Label:    label,
+			Title:    title,
+			Site:     site,
+			Account:  account,
 			Password: password,
 			Note:     note,
 		}
 		p.Save()
 	case "del":
-		passer.Password{Id: id}.Remove()
+		pm.Password{Id: id}.Remove()
 	}
 
-	result := P.Get(label)
-	b, _ := json.Marshal(result)
+	//	Filter
+	query := r.URL.Query().Get("q")
+	origins := P.Get(query)
+	results := []interface{}{}
+	for i := range origins {
+		results = append(results, origins[i].GetFake())
+	}
+	b, _ := json.Marshal(results)
 	w.Write(b)
 }
 
