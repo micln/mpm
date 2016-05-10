@@ -77,7 +77,7 @@ func (p *Password) Exist() bool {
 
 func randomPassword() string {
 	rand.Seed(time.Now().UnixNano())
-	all := `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,@.!<>`
+	all := `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,@.!_-#$%^&*+=|\`
 	s := ``
 	for i := 1; i <= 12; i++ {
 		j := rand.Intn(len(all))

@@ -158,7 +158,7 @@ func (this *PManager) LoadFromDB() {
 func (this *PManager) startClearUp() {
 	go func() {
 		for {
-			time.Sleep(5 * time.Second)
+			time.Sleep(1 * time.Hour)
 
 			l, r := 1, len(this.datas)-1
 			for l < r {

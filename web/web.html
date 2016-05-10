@@ -95,10 +95,10 @@
 	$('form').submit(function () {
 
 		//	check dumplicate
-		var title = $('[name=title]').val();
+		/*var title = $('[name=title]').val();
 		if (data[title] !== undefined) {
 			if (!confirm(title + '已存在，要覆盖吗？')) return false;
-		}
+		}*/
 
 		$.get(
 				$(this).attr('action'),
